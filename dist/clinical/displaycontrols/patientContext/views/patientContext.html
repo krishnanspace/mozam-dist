@@ -1,0 +1,37 @@
+<div class="patient-info-fixed-postion-container" id="patientContext">
+    <div class="patient-info-fixed">
+        <ul>
+            <li class="patient-name-image-container">
+                <img class="patient-image" ng-src="{{::patientContext.image}}" fallback-src="../images/blank-user.gif">
+                <span class="patient-name" ng-if="showNameAndImage">
+                  {{patientContext.givenName}} {{patientContext.familyName}}
+                </span>
+                <span class="patient-name">
+                    ({{patientContext.identifier}})
+                </span>
+            </li>
+            <li>{{patientContext.gender}}</li>
+            <li>{{patientContext.birthdate | birthDateToAgeText}}</li>
+            <li ng-repeat="(key, value) in patientContext.additionalPatientIdentifiers">
+                NID: {{value}}
+            </li>
+            <li>{{'REGISTRATION_LABEL_REGISTRATION_DATE' | translate}}: {{patientContext.personDateCreated | date}}</li>
+            <li ng-repeat="(key, value) in patientContext.personAttributes" ng-if="value.description!='Is transferred'">
+                {{value.description}}: {{value.value}}
+            </li>
+            <li ng-repeat="(key, value) in patientContext.programAttributes">
+                {{value.description}}: {{value.value}}
+            </li>
+            <li ng-repeat="(key, value) in patientContext.personAttributes" ng-if="(value.description=='Is transferred' && value.value == 'Yes') && !patientContext.isDead">
+                {{ 'STATUS_PATIENT_TRANSFERRED_OUT' | translate }}
+            </li>
+            <li ng-if="patientContext.isDead">
+                {{ 'STATUS_PATIENT_DEAD' | translate}}
+            </li>
+            <li ng-if="(isEmptyObject(patientContext.personAttributes) || patientContext.personAttributes.is_transferred.value =='No' ) && !patientContext.isDead">
+                {{ 'STATUS_PATIENT_ACTIVE' | translate }}
+            </li>
+
+        </ul>
+    </div>
+</div>
